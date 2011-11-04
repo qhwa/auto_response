@@ -24,7 +24,7 @@ class AutoResponder
   def deal(*args)
     case args[0]
     when Hash
-      args[0].each { |url, res| $rules[url] = res }
+      $rules.merge! args[0]
     when String
       $rules[args[0]] = args[1]
     end
