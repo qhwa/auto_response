@@ -1,0 +1,20 @@
+# This is the AutoResponse rule config file
+# using YAML syntax
+#
+# Examples:
+# 
+# if you want to respond all requests with url 
+# equals "http://www.1688.com" with "Hello world!" :
+# http://www.1688.com : Hello world!
+#
+# if you want to respond these requests with a file:
+# http://www.yousite.com : => /home/youruser/somefile.txt
+#
+# if you want to respond with another remote url:
+# http://www.targetsite.com : => http://www.real-request-target.com/test.html
+#
+
+
+# http://www.1688.com : hello 1688
+# http://www.1688.com : => /etc/passwd
+# http://www.1688.com : => http://alibaba.com

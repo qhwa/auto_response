@@ -1,23 +1,26 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
 require 'yaml'
+require 'fileutils'
 require_relative 'proxyserver'
 require_relative 'parser'
 
 module AutoResp
+
   class AutoResponder
 
+    ARHOME = "#{ENV["HOME"]}/.autoresponse"
+
     def initialize(config={})
+      @config = config
+      init_home
       @server = ProxyServer.new(
         :BindAddress  => config[:host] || '0.0.0.0',
         :Port         => config[:port] || 9000
       )
       trap('INT') { stop }
-      load_rules(config[:config] || "#{ENV["HOME"]}/.autoresponse")
-      puts "mapping rules:"
-      @server.resp_rules.each do |n,v|
-        puts n.to_s.ljust(50) << "=> #{v}"
-      end
+      
+      load_rules
     end
     
     def start
@@ -39,9 +42,27 @@ module AutoResp
 
     alias_method :add_rule, :deal
 
-    def load_rules(path)
+    protected
+    def init_home
+      FileUtils.mkdir_p(ARHOME)
+      pwd = File.expand_path(File.dirname(__FILE__))
+      unless File.exist?("#{ARHOME}/rules")
+        FileUtils.cp "#{pwd}/rules.sample", "#{ARHOME}/rules"
+      end
+    end
+
+    def load_rules(path=nil)
+      path ||= (@config[:rule_config] || "#{ARHOME}/rules")
       if File.readable?(path)
         @server.resp_rules.merge! YAML.load_file(path)
+      end
+      log_rules
+    end
+
+    def log_rules
+      puts "mapping rules:"
+      @server.resp_rules.each do |n,v|
+        puts n.to_s.ljust(30) << "=> #{v}"
       end
     end
 
