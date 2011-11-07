@@ -13,10 +13,10 @@ class TestRespondWithFile < Test::Unit::TestCase
   end
 
   def test_respond_with_simple_file
-    @ar.deal 'http://www.test.com/' => '=> /etc/passwd'
+    @ar.deal 'http://www.test.com/' => "=> #{FIXTURE}/passwd"
     @req.start('www.test.com') do |http|
       http.request_get('/') do |res|
-        assert_equal IO.read('/etc/passwd'), res.body
+        assert_equal IO.read("#{FIXTURE}/passwd"), res.body
       end
     end
   end

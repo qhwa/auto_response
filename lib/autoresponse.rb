@@ -1,86 +1,38 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
+require_relative 'proxyserver'
 require_relative 'parser'
 
-$rules = {
-  'http://www.baidu.com' => 'http://www.163.com',
-  'http://www.google.com' => '=> /etc/passwd',
-  'http://kunmingkem.cn.alibaba.com' => '/home/bencode/webroot/static/201107/25-wpp4poffer/demo2.htm'
-}
+module AutoResp
+  class AutoResponder
 
-class AutoResponder
-  
-  def start(host='0.0.0.0', port=8888)
-    handler = SimpleHandler.new
-    @server = HttpServer.new(handler, port, host, 4, nil)
-    @server.start.join
-  end
-
-  def stop
-    @server.stop
-    @server.join
-  end
-
-  def deal(*args)
-    case args[0]
-    when Hash
-      $rules.merge! args[0]
-    when String
-      $rules[args[0]] = args[1]
+    def initialize(config={})
+      @server = ProxyServer.new(
+        :BindAddress  => config[:host] || '0.0.0.0',
+        :Port         => config[:port] || 9000
+      )
+      trap('INT') { stop }
     end
-  end
+    
+    def start
+      @server.start
+    end
 
-  alias_method :add_rule, :deal
+    def stop
+      @server.shutdown
+    end
 
-end
-
-
-class SimpleHandler
-
-  def request_handler(request, response)
-    url = request.path
-    puts "request url: #{url}"
-
-    data = find_response(url)
-    if data
-      headers, body = Parser.parse(data)
-      response.header.update(headers) if headers
-      response.body = fetch(body)
-    else
-      open(url) do |f|
-        #TODO: add header support
-        response.body = f.read
+    def deal(*args)
+      case args.first
+      when Hash
+        @server.resp_rules.merge! args.first
+      when String
+        @server.resp_rules[args[0]] = args[1]
       end
     end
-  end
-  
-  def ip_auth_handler(io)
-    true
-  end
 
-  private
-  def find_response(url)
-    $rules.each do |tar,res|
-      return res if tar.sub(/\/$/, '') === url.sub(/\/$/, '')
-    end
-    nil
-  end
+    alias_method :add_rule, :deal
 
-  def fetch(text)
-    path = redirect_path(text)
-    if path
-      open(path) do |file|
-        return file.read
-      end
-    end
-    text
   end
-
-  def redirect_path(body)
-    mtc = body.match(/^=> (\S.*?)\s*$/)
-    mtc[1] if mtc
-  end
-
 
 end
-

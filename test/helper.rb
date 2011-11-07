@@ -2,18 +2,15 @@ require 'test/unit'
 require 'net/http'
 require_relative '../lib/autoresponse'
 
+FIXTURE = File.expand_path("fixture", File.dirname(__FILE__))
+
 def start_proxy_server(host, port)
-  ar = AutoResponder.new
-  @t = Thread.new do
-    ar.start(host, port)
-    def at_exit
-      ar.stop
-    end
-  end
-  sleep 0.1
-  ar
+  @arpid.join if @arpid
+  @ar = AutoResp::AutoResponder.new :host => host, :port => port
+  Thread.new { @ar.start }
+  @ar
 end
 
 def stop_proxy_server
-  Thread.kill @t
+  @ar.stop
 end
