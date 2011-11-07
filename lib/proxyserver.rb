@@ -20,11 +20,11 @@ module AutoResp
 
     def service(req, res)
       header, body = find_auto_res(req.unparsed_uri)
-      #puts "*"*50
-      #puts "header: #{header}"
-      #puts "body: #{body}"
-      #puts "*"*50
       if header or body
+        puts "match".ljust(8) << ": #{req.unparsed_uri}"
+        puts "header".ljust(8) << ": #{header}"
+        puts "body".ljust(8) << ": \n#{body}"
+        puts "-"*50
         res.header.merge!(header || {})
         res.body = body
       else
