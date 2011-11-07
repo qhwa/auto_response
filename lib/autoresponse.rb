@@ -1,6 +1,7 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
 require 'fileutils'
+require 'rb-inotify'
 require_relative 'proxyserver'
 require_relative 'parser'
 
@@ -17,6 +18,7 @@ module AutoResp
   class AutoResponder
 
     ARHOME = "#{ENV["HOME"]}/.autoresponse"
+    RULES = "#{ARHOME}/rules"
 
     def initialize(config={})
       @config = config
@@ -28,10 +30,12 @@ module AutoResp
       trap('INT') { stop }
       
       load_rules
+      monitor_rules_change
     end
     
     def start
-      @server.start
+      t = Thread.new { @server.start }
+      t.join
     end
 
     def stop
@@ -53,16 +57,17 @@ module AutoResp
     def init_home
       FileUtils.mkdir_p(ARHOME)
       pwd = File.expand_path(File.dirname(__FILE__))
-      unless File.exist?("#{ARHOME}/rules")
-        FileUtils.cp "#{pwd}/rules.sample", "#{ARHOME}/rules"
+      unless File.exist?(RULES)
+        FileUtils.cp "#{pwd}/rules.sample", RULES
       end
     end
 
     def load_rules(path=nil)
-      path ||= (@config[:rule_config] || "#{ARHOME}/rules")
+      path ||= @config[:rule_config]
+      path ||= "#{ARHOME}/rules"
       if File.readable?(path)
         load(path)
-        @server.resp_rules.merge! AutoResp.rules
+        @server.resp_rules = AutoResp.rules.dup
       end
       log_rules
     end
@@ -72,6 +77,12 @@ module AutoResp
       @server.resp_rules.each do |n,v|
         puts n.to_s.ljust(30) << "=> #{v}"
       end
+    end
+
+    def monitor_rules_change
+      ntf = INotify::Notifier.new
+      ntf.watch(RULES, :modify) { load_rules }
+      Thread.new { ntf.run }
     end
 
   end
