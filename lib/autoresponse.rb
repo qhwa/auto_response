@@ -56,7 +56,7 @@ module AutoResp
     protected
     def init_home
       FileUtils.mkdir_p(ARHOME)
-      pwd = File.expand_path(File.dirname(__FILE__))
+      pwd = File.expand_path('..', File.dirname(__FILE__))
       unless File.exist?(RULES)
         FileUtils.cp "#{pwd}/rules.sample", RULES
       end
