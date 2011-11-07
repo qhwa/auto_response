@@ -7,7 +7,7 @@ require_relative 'parser'
 
 module AutoResp
 
-  def self.set_rules(r)
+  def self.set_rules(r=nil)
     @@rules = r
   end
 
