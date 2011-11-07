@@ -45,7 +45,7 @@ module AutoResp
         if goto = redirect_path(txt)
           if is_uri?(goto)
             Net::HTTP.get_response(URI(goto)) do |res|
-              return [header_hash(res.header), res.body]
+              return [nil, res.body]
             end
           elsif File.exist?(goto)
             return parse(IO.read(goto))
