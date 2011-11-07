@@ -1,20 +1,48 @@
+#!/usr/bin/env ruby
 # This is the AutoResponse rule config file
-# using YAML syntax
+# using ruby syntax
 #
 # Examples:
 # 
 # if you want to respond all requests with url 
 # equals "http://www.1688.com" with "Hello world!" :
-# http://www.1688.com : Hello world!
+# "http://www.1688.com" => "Hello world!"
 #
 # if you want to respond these requests with a file:
-# http://www.yousite.com : => /home/youruser/somefile.txt
+# "http://www.yousite.com" => "=> /home/youruser/somefile.txt"
 #
 # if you want to respond with another remote url:
-# http://www.targetsite.com : => http://www.real-request-target.com/test.html
+# "http://www.targetsite.com" => "=> http://www.real-request-target.com/test.html"
 #
+# you can set response headers in the returned string
+# e.g.
+# --- start ----
+# my_name : Qhwa
+#
+# body gose here 
+# --- end ---
+#
+# responsd with above you will get:
+# header: { "my_name" => "Qhwa" }
+# body: "body goes here"
+#
+# TODO:
+# support regexpression identifier, like:
+# /any\.keyword\.com/ => "any resp"
+#
+# TODO:
+# support Array result response, 
+# e.g.
+# 'http://mysite' => [200, { header_name: 'header_value' }, 'This is my site']
 
+AutoResp.set_rules(
 
-# http://www.1688.com : hello 1688
-# http://www.1688.com : => /etc/passwd
-# http://www.1688.com : => http://alibaba.com
+  # responding with simple string
+  # "http://www.3688.com"   => "hello world",
+
+  # responding a 'www.passwd.com' with content of file '/etc/passwd'
+  # "http://www.passwd.com" => "=> /etc/passwd",
+
+  # responding qhwa's blog with www.google.com
+  # "http://q.pnq.cc"       => "=> http://www.google.com"
+)

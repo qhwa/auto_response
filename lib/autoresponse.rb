@@ -1,11 +1,18 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
-require 'yaml'
 require 'fileutils'
 require_relative 'proxyserver'
 require_relative 'parser'
 
 module AutoResp
+
+  def self.set_rules(r)
+    @@rules = r
+  end
+
+  def self.rules
+    @@rules || {}
+  end
 
   class AutoResponder
 
@@ -54,7 +61,8 @@ module AutoResp
     def load_rules(path=nil)
       path ||= (@config[:rule_config] || "#{ARHOME}/rules")
       if File.readable?(path)
-        @server.resp_rules.merge! YAML.load_file(path)
+        load(path)
+        @server.resp_rules.merge! AutoResp.rules
       end
       log_rules
     end
