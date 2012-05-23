@@ -4,15 +4,11 @@ module AutoResp
       ::AutoResp.add_rule(target, &block);
     end
 
-    def send(resp)
+    def r(resp)
       ::AutoResp.add_handler( resp )
     end
 
-    def send_file(path)
-      redirect( path )
-    end
-
-    def redirect(url)
+    def goto(url)
       ::AutoResp.add_handler '=GOTO=> ' << url
     end
   end

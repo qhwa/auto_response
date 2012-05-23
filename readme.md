@@ -16,7 +16,7 @@
 
     ~~~ruby
     url 'http://i.me'
-    send 'Hello world!'
+    r   'Hello world!'
     ~~~
 
 * 为你的浏览器配置代理服务器为 `http://127.0.0.1:9000`

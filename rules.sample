@@ -7,28 +7,28 @@
 # if you want to respond all requests with url 
 # equals "http://www.1688.com" with "Hello world!" :
 url "http://www.1688.com" 
-send "Hello world" 
+r "Hello world" 
 
 # or you can respond with Array
 url "http://china.alibaba.com"
-send [200, {}, "Got replaced"] #[status, header, body]
+r [200, {}, "Got replaced"] #[status, header, body]
 
 # if you want to respond these requests with a file:
 url "http://www.yousite.com" 
-send_file "/home/youruser/somefile.txt"
+goto "/home/youruser/somefile.txt"
 
 # on Windows:
 url "http://www.another-site.com" 
-send_file "C:/Program\ Files/proj/test.txt"
+goto "C:/Program\ Files/proj/test.txt"
 
 # if you want to respond with another remote url:
 url "http://www.targetsite.com" 
-redirect "http://www.real-request-target.com/test.html"
+goto "http://www.real-request-target.com/test.html"
 
 # you can set response headers in the returned string
 # e.g.
 url "http://www.target-site.com/target-url"
-send <<-RESP
+r <<-RESP
     Test-Msg      : http-header-example
     header-server : Auto-Responder
     Content-Type  : text/html; charset=utf-8
@@ -39,11 +39,11 @@ send <<-RESP
 
 # just respond with status number
 url "http://www.catchme.com"
-send 404
+r 404
 
 # Example of using regexp
 url %r{http://pnq\.cc}
-send "Any request made to pnq.cc will be responded with this message."
+r "Any request made to pnq.cc will be responded with this message."
 
 # Regular expression and params
 url %r{http://anysite\.cc(.*)} do |uri, path|
