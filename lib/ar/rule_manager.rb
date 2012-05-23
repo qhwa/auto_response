@@ -38,5 +38,3 @@ module AutoResp
   end
 
 end
-
-p AutoResp::RuleManager.rules
