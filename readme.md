@@ -8,6 +8,7 @@
 * 下载并运行
 
         git clone git://github.com/qhwa/autoresponse.git
+        cd autoresponse
         bundle
         bin/ar
 
