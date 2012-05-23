@@ -13,7 +13,7 @@ class TestRespondWithURL < Test::Unit::TestCase
   end
 
   def test_respond_with_simple_file
-    @ar.deal 'http://www.test.com/' => '=> http://www.1688.com/crossdomain.xml'
+    @ar.add_rule 'http://www.test.com/' => '=GOTO=> http://www.1688.com/crossdomain.xml'
     @req.start('www.test.com') do |http|
       http.request_get('/') do |res|
         open("http://www.1688.com/crossdomain.xml") do |file|

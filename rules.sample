@@ -1,48 +1,63 @@
 #!/usr/bin/env ruby
 # This is the AutoResponse rule config file
 # using ruby syntax
-#
+
 # Examples:
-# 
+ 
 # if you want to respond all requests with url 
 # equals "http://www.1688.com" with "Hello world!" :
-# "http://www.1688.com" => "Hello world!"
-#
+url "http://www.1688.com" 
+send "Hello world" 
+
+# or you can respond with Array
+url "http://china.alibaba.com"
+send [200, {}, "Got replaced"] #[status, header, body]
+
 # if you want to respond these requests with a file:
-# "http://www.yousite.com" => "=> /home/youruser/somefile.txt"
-#
+url "http://www.yousite.com" 
+send_file "/home/youruser/somefile.txt"
+
+# on Windows:
+url "http://www.another-site.com" 
+send_file "C:/Program\ Files/proj/test.txt"
+
 # if you want to respond with another remote url:
-# "http://www.targetsite.com" => "=> http://www.real-request-target.com/test.html"
-#
+url "http://www.targetsite.com" 
+redirect "http://www.real-request-target.com/test.html"
+
 # you can set response headers in the returned string
 # e.g.
-# --- start ----
-# my_name : Qhwa
-#
-# body gose here 
-# --- end ---
-#
-# responsd with above you will get:
-# header: { "my_name" => "Qhwa" }
-# body: "body goes here"
-#
-# TODO:
-# support regexpression identifier, like:
-# /any\.keyword\.com/ => "any resp"
-#
-# TODO:
-# support Array result response, 
-# e.g.
-# 'http://mysite' => [200, { header_name: 'header_value' }, 'This is my site']
+url "http://www.target-site.com/target-url"
+send <<-RESP
+    Test-Msg      : http-header-example
+    header-server : Auto-Responder
+    Content-Type  : text/html; charset=utf-8
 
-AutoResp.set_rules(
+    <!Doctype html>
+    <html><body><h1>Hello world!</h1></body></html>
+  RESP
 
-  # responding with simple string
-  # "http://www.3688.com"   => "hello world",
+# just respond with status number
+url "http://www.catchme.com"
+send 404
 
-  # responding a 'www.passwd.com' with content of file '/etc/passwd'
-  # "http://www.passwd.com" => "=> /etc/passwd",
+# Example of using regexp
+url %r{http://pnq\.cc}
+send "Any request made to pnq.cc will be responded with this message."
 
-  # responding qhwa's blog with www.google.com
-  # "http://q.pnq.cc"       => "=> http://www.google.com"
-)
+# Regular expression and params
+url %r{http://anysite\.cc(.*)} do |uri, path|
+  <<-RESP
+    Content-Type  : text/html; charset=utf-8
+
+    <style>
+      body { font-size: 50pt; }
+      em { color: #ff7300; }
+      small { color: #ccc; }
+    </style>
+
+    With regular expression, you can do more powerful things.  <br/> 
+    You're requesting <em>#{path}</em> <br/>
+    <small>Server time is #{Time.now} now. </small>
+    RESP
+end

@@ -4,15 +4,12 @@ module AutoResp
 
     require 'net/http'
     
-    def parse(str)
+    def parse( str )
 
       headers, body = {}, []
       to_find_header, body_start = true, false
-      lines = str.lines
-      #if lines[0] =~ /^\s*$/ or !(lines.any? {|l| l=})
-        #to_find_header = false
-      #end
-      lines.each_with_index do |line, idx|
+
+      str.lines.each_with_index do |line, idx|
         if to_find_header and not body_start
           if line =~ /^\s*$/
             if idx == 0
@@ -43,7 +40,7 @@ module AutoResp
     end
 
     def parse_header_item(str)
-      mtc = str.match /^\s*(\S+):\s*(\S*)\s*$/
+      mtc = str.match /^\s*(\S+)\s*:\s*(\S.*)$/
       [mtc[1], mtc[2]] if mtc
     end
 

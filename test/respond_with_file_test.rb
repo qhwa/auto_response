@@ -13,7 +13,7 @@ class TestRespondWithFile < Test::Unit::TestCase
   end
 
   def test_respond_with_simple_file
-    @ar.deal 'http://www.test.com/' => "=> #{FIXTURE}/passwd"
+    @ar.add_rule 'http://www.test.com/' => "=GOTO=> #{FIXTURE}/passwd"
     @req.start('www.test.com') do |http|
       http.request_get('/') do |res|
         assert_equal IO.read("#{FIXTURE}/passwd"), res.body

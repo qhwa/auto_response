@@ -6,6 +6,8 @@ require 'test/unit/ui/console/testrunner'
 require_relative 'respond_with_file_test'
 require_relative 'respond_with_string_test'
 require_relative 'respond_with_url_test'
+require_relative 'respond_with_array_test'
+require_relative 'respond_with_number_test'
 require_relative 'response_text_parser_test'
 
 class ALLTests < Test::Unit::TestSuite
@@ -17,6 +19,8 @@ class ALLTests < Test::Unit::TestSuite
     tests << TestRespondWithString.suite
     tests << TestRespondWithFile.suite
     tests << TestRespondWithURL.suite
+    tests << TestRespondWithArray.suite
+    tests << TestRespondWithStatusCode.suite
     
     tests
   end
