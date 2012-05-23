@@ -4,9 +4,9 @@ require 'fileutils'
 require 'rb-inotify'
 require 'colorize'
 
-require_relative 'proxyserver'
-require_relative 'parser'
-require_relative 'dsl'
+require_relative 'ar/proxyserver'
+require_relative 'ar/parser'
+require_relative 'ar/rule_dsl'
 
 module AutoResp
 
