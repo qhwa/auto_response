@@ -1,5 +1,4 @@
 require_relative 'helper'
-require_relative '../lib/parser'
 
 class ParserTest < Test::Unit::TestCase
 

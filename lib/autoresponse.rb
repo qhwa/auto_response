@@ -76,16 +76,20 @@ module AutoResp
     def add_rule(*args, &block)
       case args.first
       when Hash
-        @server.rules.merge! args.first
+        rules.merge! args.first
       when String
-        @server.rules[args[0]] = args[1]
+        rules[args[0]] = args[1]
       when Regexp
         if block_given?
-          @server.rules[args[0]] = block
+          rules[args[0]] = block
         else
-          @server.rules[args[0]] = args[1]
+          rules[args[0]] = args[1]
         end
       end
+    end
+
+    def rules
+      ::AutoResp.rules
     end
 
     private
@@ -100,7 +104,7 @@ module AutoResp
 
     def log_rules
       puts "mapping rules:"
-      @server.rules.each do |n,v|
+      rules.each do |n,v|
         puts n.to_s.ljust(30).green << "=> #{v}"
       end
     end
