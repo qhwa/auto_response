@@ -12,11 +12,14 @@
         bin/ar
 
 * 第一次运行后会自动在 `$HOME` 下生成一个 `.autoresponse` 目录，里面含有一个 rules 文件，这个文件就是规则配置文件。你可以根据自己的需要进行修改。
-* 为你的浏览器配置代理服务器为 `http://127.0.0.1:9000`
     例如配置一条规则为：
 
-        url 'http://i.me'
-        send 'Hello world!'
+    ~~~ruby
+    url 'http://i.me'
+    send 'Hello world!'
+    ~~~
+
+* 为你的浏览器配置代理服务器为 `http://127.0.0.1:9000`
 
 * 访问网址 `http://i.me`，将会看到"Hello world!"
 
