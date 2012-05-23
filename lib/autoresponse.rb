@@ -6,6 +6,7 @@ require 'colorize'
 
 require_relative 'proxyserver'
 require_relative 'parser'
+require_relative 'dsl'
 
 module AutoResp
 
@@ -69,14 +70,21 @@ module AutoResp
       puts "\nshuting down"
       @server.shutdown
       @thread.exit if @thread
+      Thread.main
     end
 
-    def add_rule(*args)
+    def add_rule(*args, &block)
       case args.first
       when Hash
-        @server.resp_rules.merge! args.first
+        @server.rules.merge! args.first
       when String
-        @server.resp_rules[args[0]] = args[1]
+        @server.rules[args[0]] = args[1]
+      when Regexp
+        if block_given?
+          @server.rules[args[0]] = block
+        else
+          @server.rules[args[0]] = args[1]
+        end
       end
     end
 
@@ -86,14 +94,13 @@ module AutoResp
       path ||= "#{ARHOME}/rules"
       if File.readable?(path)
         load(path)
-        @server.resp_rules = AutoResp.rules.dup
       end
       log_rules
     end
 
     def log_rules
       puts "mapping rules:"
-      @server.resp_rules.each do |n,v|
+      @server.rules.each do |n,v|
         puts n.to_s.ljust(30).green << "=> #{v}"
       end
     end
@@ -106,23 +113,5 @@ module AutoResp
 
   end
 
-  module Helpers
-    def url(target, &block)
-      AutoResp.add_rule(target, &block);
-    end
-
-    def send(resp)
-      AutoResp.add_handler( resp )
-    end
-
-    def send_file(path)
-      redirect( path )
-    end
-
-    def redirect(url)
-      AutoResp.add_handler '=GOTO=> ' << url
-    end
-  end
 end
 
-extend AutoResp::Helpers

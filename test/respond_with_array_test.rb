@@ -27,7 +27,6 @@ class TestRespondWithArray < Test::Unit::TestCase
     @ar.add_rule 'http://www.1688.com' => [404, nil, 'test']
     @req.start('www.1688.com') do |http|
       http.request_get('/') do |res|
-        puts res.class.to_s.red
         assert_equal( nil, res.header["test"])
         assert_equal 'test', res.body
         assert_equal "404", res.code

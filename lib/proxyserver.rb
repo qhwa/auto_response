@@ -16,8 +16,13 @@ module AutoResp
         :AccessLog  => [],
         :Logger     => WEBrick::Log.new("/dev/null")
       }))
-      @resp_rules = {}
     end
+
+    def response_rules
+      ::AutoResp.rules || {}
+    end
+
+    alias_method :rules, :response_rules
 
     def service(req, res)
       header, body, status = find_auto_res(req.unparsed_uri)
@@ -35,7 +40,7 @@ module AutoResp
     end
 
     def find_auto_res(url)
-      @resp_rules.find do |tar, map|
+      response_rules.find do |tar, map|
         if trim_url(tar) === trim_url(url)
           return fetch(map, tar, url)
         end

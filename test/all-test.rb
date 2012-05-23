@@ -8,6 +8,7 @@ require_relative 'respond_with_string_test'
 require_relative 'respond_with_url_test'
 require_relative 'respond_with_array_test'
 require_relative 'respond_with_number_test'
+require_relative 'match_with_reg_test'
 require_relative 'response_text_parser_test'
 
 class ALLTests < Test::Unit::TestSuite
@@ -21,6 +22,7 @@ class ALLTests < Test::Unit::TestSuite
     tests << TestRespondWithURL.suite
     tests << TestRespondWithArray.suite
     tests << TestRespondWithStatusCode.suite
+    tests << TestMatchWithReg.suite
     
     tests
   end
