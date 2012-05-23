@@ -1,6 +1,7 @@
 require 'webrick/httpproxy'
 require 'webrick/log'
 
+require_relative 'rule_manager'
 require_relative 'parser'
 
 module AutoResp
@@ -9,8 +10,6 @@ module AutoResp
     
     include Parser
 
-    attr_accessor :resp_rules
-
     def initialize(config={})
       super(config.update({
         :AccessLog  => [],
@@ -18,15 +17,10 @@ module AutoResp
       }))
     end
 
-    def response_rules
-      ::AutoResp.rules || {}
-    end
-
-    alias_method :rules, :response_rules
-
     def service(req, res)
       header, body, status = find_auto_res(req.unparsed_uri)
       res.status = status if status
+
       if header or body
         puts "match".ljust(8)   << ": #{req.unparsed_uri}"
         puts "header".ljust(8)  << ": #{header}"
@@ -40,11 +34,15 @@ module AutoResp
     end
 
     def find_auto_res(url)
-      response_rules.find do |tar, map|
+      rules.find do |tar, map|
         if trim_url(tar) === trim_url(url)
           return fetch(map, tar, url)
         end
       end
+    end
+
+    def rules
+      ::AutoResp::RuleManager.rules
     end
 
     def fetch(txt, declare, uri)
@@ -66,9 +64,9 @@ module AutoResp
           parse(txt)
         end
       when Fixnum
-        [nil, nil, txt]
+        [{}, "", txt]
       when Array
-        p [txt[1], txt[2], txt[0]]
+        [txt[1], txt[2], txt[0]]
       end
     end
 

@@ -5,24 +5,12 @@ require 'rb-inotify'
 require 'colorize'
 
 require_relative 'ar/proxyserver'
+require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
 require_relative 'ar/rule_dsl'
 
 module AutoResp
 
-  @@rules = {}
-
-  def self.rules; @@rules; end
-  def self.add_rule( target, &block )
-    @@last_rule = target
-    @@rules[target] = block
-  end
-
-  def self.add_handler( handler )
-    if @@last_rule
-      @@rules[@@last_rule] = handler
-    end
-  end
 
   class AutoResponder
 
@@ -69,8 +57,7 @@ module AutoResp
     def stop
       puts "\nshuting down"
       @server.shutdown
-      @thread.exit if @thread
-      Thread.main
+      @thread.kill
     end
 
     def add_rule(*args, &block)
@@ -89,7 +76,11 @@ module AutoResp
     end
 
     def rules
-      ::AutoResp.rules
+      ::AutoResp::RuleManager.rules
+    end
+
+    def clear_rules
+      rules.clear
     end
 
     private

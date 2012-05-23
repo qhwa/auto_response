@@ -2,15 +2,7 @@ require_relative 'helper'
 
 class TestRespondWithFile < Test::Unit::TestCase
 
-  def setup
-    @ar = start_proxy_server('0.0.0.0', 8765)
-    @req = Net::HTTP::Proxy('0.0.0.0', 8765)
-    sleep 0.1
-  end
-
-  def teardown
-    stop_proxy_server
-  end
+  include ARProxyTest
 
   def test_respond_with_simple_file
     @ar.add_rule 'http://www.test.com/' => "=GOTO=> #{FIXTURE}/passwd"

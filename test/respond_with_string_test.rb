@@ -2,15 +2,7 @@ require_relative 'helper'
 
 class TestRespondWithString < Test::Unit::TestCase
 
-  def setup
-    @ar = start_proxy_server('127.0.0.1', 8765)
-    @req = Net::HTTP::Proxy('127.0.0.1', 8765)
-    sleep 0.1
-  end
-
-  def teardown
-    stop_proxy_server
-  end
+  include ARProxyTest
 
   def test_respond_with_simple_string
     @ar.add_rule 'http://www.test.com/' => 'test'
