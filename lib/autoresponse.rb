@@ -8,6 +8,7 @@ require_relative 'ar/proxyserver'
 require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
 require_relative 'ar/rule_dsl'
+require_relative 'ar/session_viewer'
 
 module AutoResp
 
@@ -23,6 +24,7 @@ module AutoResp
       init_proxy_server
       load_rules
       monitor_rules_change
+      start_viewer
     end
     
     protected
@@ -43,9 +45,21 @@ module AutoResp
       trap('INT') { stop_and_exit }
     end
 
+    def start_viewer
+      @sv_thread = Thread.new {
+        sleep 0.2
+        SessionViewer.proxy_server = @server
+        SessionViewer.run!
+        Thread.pass
+      }
+    end
+
     public
     def start
-      @thread = Thread.new { @server.start }
+      @thread = Thread.new { 
+        sleep 0.1
+        @server.start 
+      }
       @thread.join
     end
 

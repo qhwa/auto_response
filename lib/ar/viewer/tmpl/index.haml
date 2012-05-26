@@ -1,0 +1,55 @@
+!!! 5
+%html
+  %head
+    %title sessions - AutoResponse
+
+    :css
+      html, body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      .sessions {
+        height: 100%;
+      }
+
+      .sessions .list {
+        width: 50%;
+        float: left;
+        height: 100%;
+        overflow-y: scroll;
+      }
+
+      .sessions .list table {
+      }
+
+      .sessions .list td {
+        word-break: break-all;
+      }
+
+      .sessions .list tr.stt-200 { }
+      .sessions .list tr.stt-500 { color: red; }
+
+      .sessions .inspect {
+        width: 50%;
+        float: left;
+        background: #ccc;
+        height: 100%;
+      }
+
+  %body
+    .sessions
+      .list
+        %table
+          %thead
+            %tr
+              %th status
+              %th url
+          %tbody
+            - @sessions.each do |req, res|
+              %tr( class="stt-#{res.status}")
+                %td= res.status
+                %td= req.unparsed_uri
+      .inspect
+        detail
+

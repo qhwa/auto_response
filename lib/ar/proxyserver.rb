@@ -9,15 +9,19 @@ module AutoResp
   class ProxyServer < WEBrick::HTTPProxyServer
     
     include Parser
+    attr_reader :sessions
 
     def initialize(config={})
       super(config.update({
         :AccessLog  => [],
         :Logger     => WEBrick::Log.new("/dev/null")
       }))
+      @sessions = []
     end
 
     def service(req, res)
+      puts "[#{req.unparsed_uri}]"
+      sessions << [req, res]
       header, body, status = find_auto_res(req.unparsed_uri)
       res.status = status if status
 
