@@ -18,6 +18,7 @@ module AutoResp
 
     def initialize(config={})
       @config = config
+      @rule_manager = RuleManager.new
       init_autoresponse_home
       init_proxy_server
       load_rules
@@ -36,6 +37,7 @@ module AutoResp
     protected
     def init_proxy_server
       @server = ProxyServer.new(
+        self,
         :BindAddress  => @config[:host] || '0.0.0.0',
         :Port         => @config[:port] || 9000
       )
@@ -75,7 +77,7 @@ module AutoResp
     end
 
     def rules
-      ::AutoResp::RuleManager.rules
+      @rule_manager.rules
     end
 
     def clear_rules
@@ -87,7 +89,7 @@ module AutoResp
       path ||= @config[:rule_config]
       path ||= "#{ARHOME}/rules"
       if File.readable?(path)
-        ::AutoResp::RuleManager.class_eval File.read(path) rescue e
+        @rule_manager.instance_eval File.read(path)
       end
       log_rules
     end
@@ -101,8 +103,13 @@ module AutoResp
 
     def monitor_rules_change
       ntf = INotify::Notifier.new
-      ntf.watch(RULES, :modify) { load_rules }
+      ntf.watch(RULES, :modify) { reload_rules }
       Thread.new { ntf.run }
+    end
+
+    def reload_rules
+      @rule_manager.clear
+      load_rules
     end
 
   end
