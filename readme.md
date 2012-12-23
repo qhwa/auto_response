@@ -10,11 +10,13 @@ Auto_response acts as a proxy server like Fiddler does, allowing you to modify t
 
 1. Install and run
 
-        gem install 'auto_response'
-        ar start
+    ~~~sh
+    gem install 'auto_response'
+    ar start
 
-        ar status #check server status
-        ar stop   #stop proxy server
+    ar status #check server status
+    ar stop   #stop proxy server
+    ~~~
 
 2. Set your browser proxy to 'http://127.0.0.1:9000'
 3. Edit the configuration file to modify the urls you want change the response.
