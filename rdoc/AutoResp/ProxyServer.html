@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class AutoResp::ProxyServer - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../index.html">Home</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/ar/proxyserver.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">WEBrick::HTTPProxyServer
+  
+</nav>
+
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="Parser.html">AutoResp::Parser</a>
+  
+  
+  </ul>
+</nav>
+
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-fetch">#fetch</a>
+    
+    <li><a href="#method-i-find_auto_res">#find_auto_res</a>
+    
+    <li><a href="#method-i-service">#service</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../AutoResp.html">AutoResp</a>
+  
+    <li><a href="../AutoResp/AutoResponder.html">AutoResp::AutoResponder</a>
+  
+    <li><a href="../AutoResp/Parser.html">AutoResp::Parser</a>
+  
+    <li><a href="../AutoResp/ProxyServer.html">AutoResp::ProxyServer</a>
+  
+    <li><a href="../AutoResp/RuleDSL.html">AutoResp::RuleDSL</a>
+  
+    <li><a href="../AutoResp/RuleManager.html">AutoResp::RuleManager</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class AutoResp::ProxyServer</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(core, config={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/ar/proxyserver.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">core</span>, <span class="ruby-identifier">config</span>={})
+  <span class="ruby-ivar">@core</span> = <span class="ruby-identifier">core</span>
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">config</span>.<span class="ruby-identifier">update</span>({
+    <span class="ruby-value">:AccessLog</span>  =<span class="ruby-operator">&gt;</span> [],
+    <span class="ruby-value">:Logger</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">WEBrick</span><span class="ruby-operator">::</span><span class="ruby-constant">Log</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;/dev/null&quot;</span>)
+  }))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-fetch" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fetch</span><span
+            class="method-args">(txt, declare, uri)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fetch-source">
+            <pre><span class="ruby-comment"># File lib/ar/proxyserver.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">txt</span>, <span class="ruby-identifier">declare</span>, <span class="ruby-identifier">uri</span>)
+
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">txt</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">Proc</span>
+    <span class="ruby-identifier">mtc</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">declare</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">Regexp</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">declare</span>
+    <span class="ruby-identifier">fetch</span>( <span class="ruby-identifier">txt</span>.<span class="ruby-identifier">call</span>(*<span class="ruby-identifier">mtc</span>), <span class="ruby-identifier">declare</span>, <span class="ruby-identifier">uri</span> )
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">goto</span> = <span class="ruby-identifier">redirect_path</span>(<span class="ruby-identifier">txt</span>)
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_uri?</span>(<span class="ruby-identifier">goto</span>)
+        <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get_response</span>(<span class="ruby-constant">URI</span>(<span class="ruby-identifier">goto</span>)) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword">return</span> [<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span>]
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">goto</span>)
+        <span class="ruby-keyword">return</span> <span class="ruby-identifier">parse</span>(<span class="ruby-constant">IO</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">goto</span>))
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">txt</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">Fixnum</span>
+    [{}, <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-identifier">txt</span>]
+  <span class="ruby-keyword">when</span> <span class="ruby-constant">Array</span>
+    [<span class="ruby-identifier">txt</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">txt</span>[<span class="ruby-value">2</span>], <span class="ruby-identifier">txt</span>[<span class="ruby-value">0</span>]]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fetch-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fetch-method -->
+
+    
+      <div id="method-i-find_auto_res" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_auto_res</span><span
+            class="method-args">(url)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_auto_res-source">
+            <pre><span class="ruby-comment"># File lib/ar/proxyserver.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_auto_res</span>(<span class="ruby-identifier">url</span>)
+  <span class="ruby-ivar">@core</span>.<span class="ruby-identifier">rules</span>.<span class="ruby-identifier">find</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tar</span>, <span class="ruby-identifier">map</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">trim_url</span>(<span class="ruby-identifier">tar</span>) <span class="ruby-operator">===</span> <span class="ruby-identifier">trim_url</span>(<span class="ruby-identifier">url</span>)
+      <span class="ruby-keyword">return</span> <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">map</span>, <span class="ruby-identifier">tar</span>, <span class="ruby-identifier">url</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- find_auto_res-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- find_auto_res-method -->
+
+    
+      <div id="method-i-service" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">service</span><span
+            class="method-args">(req, res)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="service-source">
+            <pre><span class="ruby-comment"># File lib/ar/proxyserver.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">service</span>(<span class="ruby-identifier">req</span>, <span class="ruby-identifier">res</span>)
+  <span class="ruby-identifier">header</span>, <span class="ruby-identifier">body</span>, <span class="ruby-identifier">status</span> = <span class="ruby-identifier">find_auto_res</span>(<span class="ruby-identifier">req</span>.<span class="ruby-identifier">unparsed_uri</span>)
+  <span class="ruby-identifier">res</span>.<span class="ruby-identifier">status</span> = <span class="ruby-identifier">status</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">status</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">header</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;match&quot;</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-value">8</span>)   <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: #{req.unparsed_uri}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;header&quot;</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-value">8</span>)  <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: #{header}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;body&quot;</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-value">8</span>)    <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;: \n#{body}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;-&quot;</span>*<span class="ruby-value">50</span>
+    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">header</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">header</span> <span class="ruby-operator">||</span> {})
+    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">body</span> = <span class="ruby-identifier">body</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">super</span>(<span class="ruby-identifier">req</span>, <span class="ruby-identifier">res</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- service-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- service-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
