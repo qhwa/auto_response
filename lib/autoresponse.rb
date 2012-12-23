@@ -1,7 +1,7 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
 require 'fileutils'
-require 'rb-inotify'
+require 'listen'
 require 'colorize'
 
 require_relative 'ar/proxyserver'
@@ -102,9 +102,9 @@ module AutoResp
     end
 
     def monitor_rules_change
-      ntf = INotify::Notifier.new
-      ntf.watch(RULES, :modify) { reload_rules }
-      Thread.new { ntf.run }
+      listener = Listen.to(ARHOME)
+      listener.change { reload_rules }
+      Thread.new { listener.start }
     end
 
     def reload_rules

@@ -1,5 +1,5 @@
 source :rubygems
-gem 'rb-inotify'
+gem 'listen'
 gem 'colorize'
 
 group :test do
