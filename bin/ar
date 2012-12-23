@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'daemons'
 
-START_SCRIPT = 'bin/start_ar.rb'
+START_SCRIPT = File.dirname(__FILE__) + '/start_ar.rb'
 
 Daemons.run START_SCRIPT
