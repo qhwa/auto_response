@@ -13,7 +13,7 @@ module AutoResp
 
   class AutoResponder
 
-    ARHOME = "#{ENV["HOME"]}/.autoresponse"
+    ARHOME = "#{ENV["HOME"]}/.auto_response"
     RULES = "#{ARHOME}/rules"
 
     def initialize(config={})
