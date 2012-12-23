@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     colorize (0.5.8)
+    daemons (1.1.9)
     listen (0.6.0)
     test-unit (2.5.3)
 
@@ -10,5 +11,6 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
+  daemons
   listen
   test-unit
