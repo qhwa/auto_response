@@ -2,7 +2,7 @@
 
 ## What's auto_response for?
 
-[Fiddler](http://www.fiddler2.com) is my favor tool of debugging HTTP web apps. However it is only available on Windows. So I port my most used feature , the 'auto respond', to Linux.
+[Fiddler](http://www.fiddler2.com) is the favor tool of many web developers for debugging HTTP web apps. However it is only available on Windows. AutoResponse ports the most used feature of fiddler, 'auto respond', to Linux and Mac world.
 
 Auto_response acts as a proxy server like Fiddler does, allowing you to modify the content of HTTP response.
 
@@ -11,7 +11,10 @@ Auto_response acts as a proxy server like Fiddler does, allowing you to modify t
 1. Install and run
 
         gem install 'auto_response'
-        bin/ar start
+        ar start
+
+        ar status #check server status
+        ar stop   #stop proxy server
 
 2. Set your browser proxy to 'http://127.0.0.1:9000'
 3. Edit the configuration file to modify the urls you want change the response.
