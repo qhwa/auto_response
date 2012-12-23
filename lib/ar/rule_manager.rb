@@ -1,3 +1,5 @@
+require_relative 'rule_dsl'
+
 module AutoResp
 
   class RuleManager
@@ -5,6 +7,8 @@ module AutoResp
     @@rules = {}
 
     class << self
+
+      include RuleDSL
 
       def rules
         @@rules

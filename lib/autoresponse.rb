@@ -7,7 +7,6 @@ require 'colorize'
 require_relative 'ar/proxyserver'
 require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
-require_relative 'ar/rule_dsl'
 
 module AutoResp
 
@@ -88,7 +87,7 @@ module AutoResp
       path ||= @config[:rule_config]
       path ||= "#{ARHOME}/rules"
       if File.readable?(path)
-        load(path)
+        ::AutoResp::RuleManager.class_eval File.read(path) rescue e
       end
       log_rules
     end
