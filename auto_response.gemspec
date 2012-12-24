@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.executables = ["ar"]
   s.extra_rdoc_files = ["readme.md"]
   s.files = ["readme.md", "rules.sample", "Gemfile", "Gemfile.lock", "bin/start_ar.rb", "bin/ar", "test/all-test.rb", "test/response_text_parser_test.rb", "test/respond_with_number_test.rb", "test/respond_with_url_test.rb", "test/respond_with_string_test.rb", "test/respond_with_array_test.rb", "test/fixture", "test/fixture/passwd", "test/fixture/hello_world.txt", "test/respond_with_file_test.rb", "test/helper.rb", "test/match_with_reg_test.rb", "lib/autoresponse.rb", "lib/ar", "lib/ar/parser.rb", "lib/ar/proxyserver.rb", "lib/ar/rule_manager.rb", "lib/ar/rule_dsl.rb"]
-  s.homepage = "https://github.com/qhwa/auto_resposne"
+  s.homepage = "https://github.com/qhwa/auto_response"
   s.rdoc_options = ["--main", "readme.md"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"

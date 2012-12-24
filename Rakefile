@@ -21,11 +21,11 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "auto_response"
-  s.version           = "0.1.0"
-  s.summary           = "What this thing does"
-  s.author            = "qhwa,,,"
+  s.version           = "0.1.3"
+  s.summary           = "A proxy server for debugging HTTP requests. "
+  s.author            = "qhwa"
   s.email             = "qhwa@163.com"
-  s.homepage          = "http://yoursite.example.com"
+  s.homepage          = "https://github.com/qhwa/auto_response/issues"
 
   s.has_rdoc          = true
   s.extra_rdoc_files  = %w(readme.md)
@@ -33,7 +33,7 @@ spec = Gem::Specification.new do |s|
 
   # Add any extra files to include in the gem
   s.files             = %w(readme.md rules.sample Gemfile Gemfile.lock) + Dir.glob("{bin,test,lib}/**/*")
-  s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
+  s.executables       = "ar"
   s.require_paths     = ["lib"]
 
   # If you want to depend on other gems, add them here, along with any
