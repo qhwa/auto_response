@@ -21,7 +21,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "auto_response"
-  s.version           = "0.1.4"
+  s.version           = "0.1.5"
   s.summary           = "A proxy server for debugging HTTP requests. "
   s.author            = "qhwa"
   s.email             = "qhwa@163.com"
@@ -38,10 +38,13 @@ spec = Gem::Specification.new do |s|
 
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
-  # s.add_dependency("some_other_gem", "~> 0.1.0")
+  s.add_dependency("listen")
+  s.add_dependency("colorize")
+  s.add_dependency("daemons")
 
   # If your tests use any gems, include them here
-  # s.add_development_dependency("mocha") # for example
+  s.add_development_dependency("gem-this")
+  s.add_development_dependency("test-unit")
 end
 
 # This task actually builds the gem. We also regenerate a static
