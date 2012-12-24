@@ -21,11 +21,11 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "auto_response"
-  s.version           = "0.1.3"
+  s.version           = "0.1.4"
   s.summary           = "A proxy server for debugging HTTP requests. "
   s.author            = "qhwa"
   s.email             = "qhwa@163.com"
-  s.homepage          = "https://github.com/qhwa/auto_response/issues"
+  s.homepage          = "https://github.com/qhwa/auto_response"
 
   s.has_rdoc          = true
   s.extra_rdoc_files  = %w(readme.md)
