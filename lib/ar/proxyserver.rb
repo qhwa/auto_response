@@ -11,7 +11,8 @@ module AutoResp
     include Parser
     attr_reader :sessions
 
-    def initialize(config={})
+    def initialize(core, config={})
+      @core = core
       super(config.update({
         :AccessLog  => [],
         :Logger     => WEBrick::Log.new("/dev/null")
@@ -38,15 +39,11 @@ module AutoResp
     end
 
     def find_auto_res(url)
-      rules.find do |tar, map|
+      @core.rules.find do |tar, map|
         if trim_url(tar) === trim_url(url)
           return fetch(map, tar, url)
         end
       end
-    end
-
-    def rules
-      ::AutoResp::RuleManager.rules
     end
 
     def fetch(txt, declare, uri)

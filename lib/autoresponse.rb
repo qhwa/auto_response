@@ -1,13 +1,12 @@
 require 'xmlrpc/httpserver'
 require 'open-uri'
 require 'fileutils'
-require 'rb-inotify'
+require 'listen'
 require 'colorize'
 
 require_relative 'ar/proxyserver'
 require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
-require_relative 'ar/rule_dsl'
 require_relative 'ar/session_viewer'
 
 module AutoResp
@@ -15,11 +14,12 @@ module AutoResp
 
   class AutoResponder
 
-    ARHOME = "#{ENV["HOME"]}/.autoresponse"
+    ARHOME = "#{ENV["HOME"]}/.auto_response"
     RULES = "#{ARHOME}/rules"
 
     def initialize(config={})
       @config = config
+      @rule_manager = RuleManager.new
       init_autoresponse_home
       init_proxy_server
       load_rules
@@ -39,6 +39,7 @@ module AutoResp
     protected
     def init_proxy_server
       @server = ProxyServer.new(
+        self,
         :BindAddress  => @config[:host] || '0.0.0.0',
         :Port         => @config[:port] || 9000
       )
@@ -90,7 +91,7 @@ module AutoResp
     end
 
     def rules
-      ::AutoResp::RuleManager.rules
+      @rule_manager.rules
     end
 
     def clear_rules
@@ -102,7 +103,7 @@ module AutoResp
       path ||= @config[:rule_config]
       path ||= "#{ARHOME}/rules"
       if File.readable?(path)
-        load(path)
+        @rule_manager.instance_eval File.read(path)
       end
       log_rules
     end
@@ -115,9 +116,14 @@ module AutoResp
     end
 
     def monitor_rules_change
-      ntf = INotify::Notifier.new
-      ntf.watch(RULES, :modify) { load_rules }
-      Thread.new { ntf.run }
+      listener = Listen.to(ARHOME)
+      listener.change { reload_rules }
+      Thread.new { listener.start }
+    end
+
+    def reload_rules
+      @rule_manager.clear
+      load_rules
     end
 
   end

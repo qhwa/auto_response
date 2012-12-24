@@ -2,17 +2,18 @@ GEM
   remote: http://rubygems.org/
   specs:
     colorize (0.5.8)
-    ffi (1.0.11)
+    daemons (1.1.9)
+    gem-this (0.3.7)
     haml (3.1.7)
+    listen (0.6.0)
     rack (1.4.1)
     rack-protection (1.3.2)
       rack
-    rb-inotify (0.8.8)
-      ffi (>= 0.5.0)
     sinatra (1.3.3)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
+    test-unit (2.5.3)
     tilt (1.3.3)
 
 PLATFORMS
@@ -20,6 +21,9 @@ PLATFORMS
 
 DEPENDENCIES
   colorize
+  daemons
+  gem-this
   haml
-  rb-inotify
+  listen
   sinatra
+  test-unit

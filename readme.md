@@ -1,34 +1,89 @@
-# AutoResponse - Linux下的http调试小工具
+# AutoResponse - HTTP debugging tool for Linux and Mac
 
-## 原理
-建立一个代理服务器，将浏览器的代理设为此代理服务器提供的地址（默认为127.0.0.1:9000），可以根据规则返回指定的内容。
+## What's auto_response for?
 
-## 用法
+[Fiddler](http://www.fiddler2.com) is the favor tool of many web developers for debugging HTTP web apps. However it is only available on Windows. AutoResponse ports the most used feature of fiddler, 'auto respond', to Linux and Mac world.
 
-* 下载并运行
+Auto_response acts as a proxy server like Fiddler does, allowing you to modify the content of HTTP response.
 
-        git clone git://github.com/qhwa/autoresponse.git
-        cd autoresponse
-        bundle
-        bin/ar
+## Quick start
 
-* 第一次运行后会自动在 `$HOME` 下生成一个 `.autoresponse` 目录，里面含有一个 rules 文件，这个文件就是规则配置文件。你可以根据自己的需要进行修改。
-    例如配置一条规则为：
+1. Install and run
 
-    ~~~ruby
-    url 'http://i.me'
-    r   'Hello world!'
+    ~~~sh
+    gem install 'auto_response'
+    ar start
+
+    ar status #check server status
+    ar stop   #stop proxy server
     ~~~
 
-* 为你的浏览器配置代理服务器为 `http://127.0.0.1:9000`
+2. Set your browser proxy to 'http://127.0.0.1:9000'
+3. Edit the configuration file to modify the urls you want change the response.
 
-* 访问网址 `http://i.me`，将会看到"Hello world!"
+    By default, the configuration file is located at:
+    `$HOME/.auto_response/rules`
 
-## 特色功能
-* 支持Ruby语法，返回动态内容
-* 支持正则表达式匹配
+## Response rules
+
+~~~ruby
+# Examples:
+ 
+# just respond with status number
+url "http://www.catchme.com"
+r 404
+
+# if you want to respond all requests with url 
+# equals "http://www.1688.com" with "Hello world!" :
+url "http://www.1688.com" 
+r "Hello world" 
+
+# or you can respond with Array
+url "http://china.alibaba.com"
+r [200, {}, "Got replaced"] #[status, header, body]
+
+# if you want to respond these requests with a file:
+# this url will be responded with content of somefile.txt
+# you can set headers and body in 'somefile.txt'
+url "http://www.yousite.com" 
+goto "/home/youruser/somefile.txt"
+
+# redirect to another url
+url "http://www.targetsite.com" 
+goto "http://www.real-request-target.com/test.html"
+
+# respond with text setting headers
+url "http://www.target-site.com/target-url"
+r <<-RESP
+    Test-Msg      : http-header-example
+    header-server : Auto-Responder
+    Content-Type  : text/html; charset=utf-8
+
+    <!Doctype html>
+    <html><body><h1>Hello world!</h1></body></html>
+  RESP
+
+# match with regexp
+url %r{http://pnq\.cc}
+r "Any request made to pnq.cc will be responded with this message."
+
+# regular expression and params
+url %r{http://anysite\.cc(.*)} do |uri, path|
+  <<-RESP
+    Content-Type  : text/html; charset=utf-8
+
+    <style>
+      body { font-size: 50pt; }
+      em { color: #ff7300; }
+      small { color: #ccc; }
+    </style>
+
+    With regular expression, you can do more powerful things.  <br/> 
+    You're requesting <em>#{path}</em> <br/>
+    <small>Server time is #{Time.now} now. </small>
+    RESP
+end
+~~~
 
 ## TODO:
-* GUI的http调试页面, 将处理过的请求显示出来
-* GUI的设置界面(考虑基于http服务实现，在浏览器中操作)
-* 跨平台地监控配置文件的变化（目前只支持Linux）
+* GUI monitor showing sessions
