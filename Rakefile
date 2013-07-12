@@ -21,7 +21,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "auto_response"
-  s.version           = "0.1.5"
+  s.version           = "0.1.6"
   s.summary           = "A proxy server for debugging HTTP requests. "
   s.author            = "qhwa"
   s.email             = "qhwa@163.com"
