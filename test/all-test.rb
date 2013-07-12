@@ -1,7 +1,16 @@
+require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
 require 'test/unit/testsuite'
 require 'test/unit/ui/console/testrunner'
+
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    def require_relative(path)
+      require File.expand_path(path.to_str, File.dirname(caller[0]))
+    end
+  end
+end
 
 require_relative 'respond_with_file_test'
 require_relative 'respond_with_string_test'

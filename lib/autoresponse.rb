@@ -4,6 +4,14 @@ require 'fileutils'
 require 'listen'
 require 'colorize'
 
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    def require_relative(path)
+      require File.expand_path(path.to_str, File.dirname(caller[0]))
+    end
+  end
+end
+
 require_relative 'ar/proxyserver'
 require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
