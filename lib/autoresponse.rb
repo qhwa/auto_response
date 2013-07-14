@@ -12,7 +12,7 @@ unless Kernel.respond_to?(:require_relative)
   end
 end
 
-require_relative 'ar/proxyserver'
+require_relative 'ar/proxy_server'
 require_relative 'ar/rule_manager'
 require_relative 'ar/parser'
 require_relative 'ar/session_viewer'
