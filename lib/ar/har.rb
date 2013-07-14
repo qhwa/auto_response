@@ -27,11 +27,11 @@ module AutoResp
       end
 
       def session_to_entry( session )
-        req, res = *session
+        req, res, info = *session
         {
           pageref:   nil,
-          statedDateTime:  DateTime.now.to_s,
-          time: 50,
+          startedDateTime:  info[:start],
+          time:     info[:end].to_i - info[:start].to_i,
           request:  request_data( req ),
           response: response_data( res ),
           cache:    cache_data( req, res ),

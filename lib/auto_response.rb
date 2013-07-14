@@ -72,7 +72,6 @@ module AutoResp
     end
 
     def stop
-      @logger.info "\nshuting down"
       @server.shutdown
       @viewer_thread.kill
       @proxy_thread.kill

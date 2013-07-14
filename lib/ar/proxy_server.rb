@@ -18,11 +18,12 @@ module AutoResp
         :Logger     => WEBrick::Log.new("/dev/null")
       }))
       @sessions = []
-      @logger = config[:logger] || Logger.new
+      @ar_logger = config[:logger] || Logger.new
     end
 
     def service(req, res)
       logger.info "[#{req.unparsed_uri}]"
+      info = { start: Time.now }
 
       before_filters.each do |block|
         if block.call( req, res ) == false
@@ -31,7 +32,6 @@ module AutoResp
         end
       end
 
-      sessions << [req, res]
       header, body, status = find_auto_res(req.unparsed_uri)
       res.status = status if status
 
@@ -44,9 +44,13 @@ module AutoResp
 
         res.header.merge!(header || {})
         res.body = body
+        info[:matched] = true
       else
         super(req, res)
       end
+
+      info[:end] = Time.now
+      sessions << [req, res, info]
     end
 
     def before_filters
@@ -123,6 +127,10 @@ module AutoResp
 
     def is_single_line?(text)
       text.count("\n") < 2
+    end
+
+    def logger
+      @ar_logger
     end
 
   end
