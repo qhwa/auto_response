@@ -1,5 +1,5 @@
 $: << File.expand_path('../lib', File.dirname(__FILE__))
 
-require 'autoresponse'
+require 'auto_response'
 
 AutoResp::AutoResponder.new.start
