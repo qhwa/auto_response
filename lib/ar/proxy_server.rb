@@ -1,5 +1,5 @@
 require 'webrick/httpproxy'
-require 'webrick/log'
+require 'logger'
 
 require_relative 'rule_manager'
 require_relative 'parser'
@@ -18,24 +18,48 @@ module AutoResp
         :Logger     => WEBrick::Log.new("/dev/null")
       }))
       @sessions = []
+      @logger = config[:logger] || Logger.new
     end
 
     def service(req, res)
-      puts "[#{req.unparsed_uri}]"
+      logger.info "[#{req.unparsed_uri}]"
+
+      before_filters.each do |block|
+        if block.call( req, res ) == false
+          super req, res
+          return
+        end
+      end
+
       sessions << [req, res]
       header, body, status = find_auto_res(req.unparsed_uri)
       res.status = status if status
 
       if header or body
-        puts "match".ljust(8)   << ": #{req.unparsed_uri}"
-        puts "header".ljust(8)  << ": #{header}"
-        puts "body".ljust(8)    << ": \n#{body}"
-        puts "-"*50
+
+        logger.debug "match".ljust(8)   << ": #{req.unparsed_uri}"
+        logger.debug "header".ljust(8)  << ": #{header}"
+        logger.debug "body".ljust(8)    << ": \n#{body}"
+        logger.debug "-"*50
+
         res.header.merge!(header || {})
         res.body = body
       else
         super(req, res)
       end
+    end
+
+    def before_filters
+      @before_filters ||= []
+    end
+
+    def before_filter(&block)
+      logger.info "add before_filter".green
+      before_filters << block
+    end
+
+    def clear_before_filters
+      @before_filters.clear
     end
 
     def find_auto_res(url)

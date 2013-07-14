@@ -3,6 +3,7 @@ require 'open-uri'
 require 'fileutils'
 require 'listen'
 require 'colorize'
+require 'logger'
 
 $: << File.expand_path( File.dirname(__FILE__) )
 
@@ -22,11 +23,11 @@ module AutoResp
     def initialize(config={})
       @config = config
       @rule_manager = RuleManager.new
+      @logger = Logger.new( $stderr, Logger::WARN )
       init_autoresponse_home
       init_proxy_server
       load_rules
       monitor_rules_change
-      start_viewer
     end
     
     protected
@@ -43,27 +44,25 @@ module AutoResp
       @server = ProxyServer.new(
         self,
         :BindAddress  => @config[:host] || '0.0.0.0',
-        :Port         => @config[:port] || 9000
+        :Port         => @config[:port] || 9000,
+        :logger       => @logger
       )
       trap('INT') { stop_and_exit }
     end
 
+    def start_proxy
+      @proxy_thread = Thread.new { @server.start }
+    end
+
     def start_viewer
-      @sv_thread = Thread.new {
-        sleep 0.2
-        SessionViewer.proxy_server = @server
-        SessionViewer.run!
-        Thread.pass
-      }
+      @viewer_thread = Thread.new { SessionViewer.new( @server ).run }
     end
 
     public
     def start
-      @thread = Thread.new { 
-        sleep 0.1
-        @server.start 
-      }
-      @thread.join
+      start_proxy
+      start_viewer
+      @proxy_thread.join
     end
 
     def stop_and_exit
@@ -72,9 +71,10 @@ module AutoResp
     end
 
     def stop
-      puts "\nshuting down"
+      @logger.info "\nshuting down"
       @server.shutdown
-      @thread.kill
+      @viewer_thread.kill
+      @proxy_thread.kill
     end
 
     def add_rule(*args, &block)
@@ -111,9 +111,9 @@ module AutoResp
     end
 
     def log_rules
-      puts "mapping rules:"
+      @logger.info "mapping rules:"
       rules.each do |n,v|
-        puts n.to_s.ljust(30).green << "=> #{v}"
+        @logger.info "\n" << n.to_s.ljust(30).green << "\n=> #{v}"
       end
     end
 

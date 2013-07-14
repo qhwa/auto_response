@@ -1,9 +1,9 @@
-source :rubygems
+source 'http://ruby.taobao.org'
 gem 'listen'
 gem 'colorize'
-gem 'sinatra'
 gem 'haml'
 gem 'daemons'
+gem 'rb-inotify', '~> 0.9'
 
 group :test do
   gem 'test-unit'

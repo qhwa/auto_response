@@ -1,22 +1,24 @@
-require 'sinatra/base'
-require 'haml'
+require 'webrick/httpserver'
 
 module AutoResp
 
-  class SessionViewer < Sinatra::Base
+  VIEWER_HOST = 'localhost'
 
-    class << self
-      attr_accessor :proxy_server
+  class SessionViewer
+
+    def initialize( proxy_server )
+      @proxy_server = proxy_server
     end
 
-    set :views, File.join(settings.root, 'viewer/tmpl')
-
-    get '/' do
-      haml :index
-    end
-
-    before('/') do
-      @sessions = SessionViewer.proxy_server.sessions.dup
+    def run
+      root = File.expand_path('./viewer', File.dirname(__FILE__))
+      WEBrick::HTTPServer.new({
+        :BindAddress  => '0.0.0.0',
+        :Port         => 9090,
+        :AccessLog    => [],
+        :Logger       => WEBrick::Log.new("/dev/null"),
+        :DocumentRoot => root
+      }).start
     end
 
   end
