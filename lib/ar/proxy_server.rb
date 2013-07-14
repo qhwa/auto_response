@@ -35,14 +35,16 @@ module AutoResp
       header, body, status = find_auto_res(req.unparsed_uri)
       res.status = status if status
 
-      if header or body
+      if @rule
 
         logger.debug "match".ljust(8)   << ": #{req.unparsed_uri}"
         logger.debug "header".ljust(8)  << ": #{header}"
         logger.debug "body".ljust(8)    << ": \n#{body}"
         logger.debug "-"*50
 
-        res.header.merge!(header || {})
+        res['x-auto-response-condition']  = @rule.first.to_s
+        res['x-auto-response-with']       = @rule.last.to_s
+        res.header.merge!( header || {} )
         res.body = body
         info[:matched] = true
       else
@@ -67,11 +69,19 @@ module AutoResp
     end
 
     def find_auto_res(url)
-      @core.rules.find do |tar, map|
-        if trim_url(tar) === trim_url(url)
-          return fetch(map, tar, url)
-        end
+      rule = @core.rules.find do |condition, map_to|
+        matched? url, condition
       end
+          
+      @rule = rule
+      if rule
+        condition, map_to = *rule
+        fetch(map_to, condition, url)
+      end
+    end
+
+    def matched?( url, rule )
+      trim_url(rule) === trim_url(url)
     end
 
     def fetch(txt, declare, uri)
