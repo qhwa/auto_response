@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'net/http'
-require_relative '../lib/autoresponse'
+require_relative '../lib/auto_response'
 
 FIXTURE = File.expand_path("fixture", File.dirname(__FILE__))
 
