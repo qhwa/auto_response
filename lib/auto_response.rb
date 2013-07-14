@@ -7,6 +7,7 @@ require 'logger'
 
 $: << File.expand_path( File.dirname(__FILE__) )
 
+require 'ar/version'
 require 'ar/proxy_server'
 require 'ar/rule_manager'
 require 'ar/parser'
@@ -55,14 +56,14 @@ module AutoResp
     end
 
     def start_viewer
-      @viewer_thread = Thread.new { SessionViewer.new( @server ).run }
+      @viewer_thread = Thread.new {}
+      SessionViewer.new( @server ).run 
     end
 
     public
     def start
       start_proxy
       start_viewer
-      @proxy_thread.join
     end
 
     def stop_and_exit

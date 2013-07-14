@@ -27,7 +27,7 @@
   <div id="toolbar">
     <div class="toolbar-controls">
       <div class="toolbar-item" id="toolbar-sample-item">
-        <a href="#" class="sample">Load sample HAR</a>
+        <a href="#" class="sample">refresh</a>
       </div>
       <div class="toolbar-item" id="toolbar-search-item">
         <input id="search" type="search" incremental="" results="0" placeholder="Search Network" ng-model="query">
@@ -114,7 +114,7 @@
                   </tbody>
                 </table>
 
-                <div class="data-container" ng-repeat="page in pages">
+                <div class="data-container">
                   <div class="page-wrapper">
                   <table class="data">
                     <colgroup span="7">
@@ -128,17 +128,17 @@
                     </colgroup>
                     <thead ng-show="checked">
                       <tr class="revealed page-summary-bar">
-                        <td colspan="7">{{page.id}} {{page.title}}</td>
+                        <td colspan="7"></td>
                       </tr>
                     </thead>
                     <tfoot ng-show="checked">
                       <tr class="revealed network-summary-bar">
                         <!-- FixMe: This always assume ms -->
-                        <td colspan="7">{{page.count}} requests  ❘  {{page.transfer}} transferred  ❘  <!-- TODO: Need the time here; --> (onload: {{page.pageTimings.onLoad}}ms, DOMContentLoaded: {{page.pageTimings.onContentLoad}}ms)</td>
+                        <td colspan="7"></td>
                       </tr>
                     </tfoot>
                     <tbody>
-                      <tr ng-class="getSelectedRow($index)" class="revealed network-item network-type-{{entry.name}}" data-id="{{entry.id}}" ng-repeat="entry in page.entries | filter:query | filter:type | orderBy:predicate:reverse">
+                      <tr ng-class="getSelectedRow($index)" class="revealed network-item network-type-{{entry.name}}" data-id="{{entry.id}}" ng-repeat="entry in entries | filter:query | filter:type | orderBy:predicate:reverse">
                         <td class="name-column" ng-click="showDetails($index)"><div title="{{entry.url}}"><img class="icon">{{entry.parsedURL.lastPathComponent}}<div class="network-cell-subtitle">{{entry.folder}}</div></div></td>
                         <td class="method-column"><div title="{{entry.method}}">{{entry.method}}</div></td>
                         <td class="status-column"><div title="{{entry.status}} {{entry.statusText}}">{{entry.status}}<div class="network-cell-subtitle">{{entry.statusText}}</div></div></td>
