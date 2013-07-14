@@ -4,18 +4,12 @@ require 'fileutils'
 require 'listen'
 require 'colorize'
 
-unless Kernel.respond_to?(:require_relative)
-  module Kernel
-    def require_relative(path)
-      require File.expand_path(path.to_str, File.dirname(caller[0]))
-    end
-  end
-end
+$: << File.expand_path( File.dirname(__FILE__) )
 
-require_relative 'ar/proxy_server'
-require_relative 'ar/rule_manager'
-require_relative 'ar/parser'
-require_relative 'ar/session_viewer'
+require 'ar/proxy_server'
+require 'ar/rule_manager'
+require 'ar/parser'
+require 'ar/session_viewer'
 
 module AutoResp
 
