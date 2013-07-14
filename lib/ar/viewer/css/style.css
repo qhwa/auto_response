@@ -166,3 +166,21 @@
   bottom: 0px;
   height: 100%;
 }
+
+.auto-response-true {
+  background-color: #a0eeb1;
+  border-bottom-color: #74e78d;
+}
+
+.hide {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.resource-response-view {
+  padding: 1em;
+}
+

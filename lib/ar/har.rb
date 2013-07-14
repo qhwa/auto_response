@@ -51,7 +51,7 @@ module AutoResp
           serverIPAddress: req.host,
           #NOT implemented
           connection: '',
-          comment: ''
+          comment:    info[:matched] ? 'x-auto-response' : nil
         }
       end
 
