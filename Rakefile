@@ -1,8 +1,9 @@
 require "rubygems"
 require "rubygems/package_task"
 require "rdoc/task"
-
 require "rake/testtask"
+require_relative "lib/ar/version"
+
 Rake::TestTask.new do |t|
   t.libs << "test"
   t.test_files = FileList["test/**/*_test.rb"]
@@ -21,7 +22,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "auto_response"
-  s.version           = "0.1.6"
+  s.version           = AutoResp::VERSION
   s.summary           = "A proxy server for debugging HTTP requests. "
   s.author            = "qhwa"
   s.email             = "qhwa@163.com"
