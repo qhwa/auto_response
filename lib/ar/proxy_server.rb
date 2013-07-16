@@ -96,8 +96,9 @@ module AutoResp
             Net::HTTP.get_response(URI(goto)) do |res|
               return [nil, res.body]
             end
-          elsif File.exist?(goto)
-            return parse(IO.read(goto))
+          else
+            file = File.expand_path( goto )
+            return parse(IO.read(file)) if File.exist?(file)
           end
         else
           parse(txt)
