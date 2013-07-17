@@ -8,6 +8,10 @@ Auto_response acts as a proxy server like Fiddler does, allowing you to modify t
 
 ## Quick start
 
+1. requirements
+    - \*nix system, Mac/Linux
+    - ruby 1.9+ (may work on 1.8.7, but not very well tested)
+
 1. Install and run
 
     ~~~sh
