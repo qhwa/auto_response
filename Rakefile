@@ -44,6 +44,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("daemons")
   s.add_dependency("string_utf8")
   s.add_dependency("rb-inotify", "~> 0.9")
+  s.add_dependency("ptools")
 
   # If your tests use any gems, include them here
   s.add_development_dependency("gem-this")

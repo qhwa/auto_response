@@ -12,5 +12,9 @@ module AutoResp
     def goto(url)
       add_handler '=GOTO=> ' << url
     end
+
+    def delay(sec)
+      add_handler( lambda { |*args| sleep sec; nil } )
+    end
   end
 end

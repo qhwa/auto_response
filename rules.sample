@@ -61,3 +61,12 @@ url %r{http://anysite\.cc(.*)} do |uri, path|
     <small>Server time is #{Time.now} now. </small>
     RESP
 end
+
+# delay every images in 3 seconds
+url %r{http://.+\.(jpe?g|png|gif)$}
+delay 3
+
+# use `delay` together with other response, just simple:
+url "http://www.delayed.com"
+delay 10
+r "Delayed 10 seconds"

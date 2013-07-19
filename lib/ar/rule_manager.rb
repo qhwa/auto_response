@@ -19,7 +19,8 @@ module AutoResp
 
     def add_handler( handler )
       if @last_rule
-        rules[@last_rule] = handler
+        rules[@last_rule] ||= []
+        rules[@last_rule] << handler
       end
     end
 

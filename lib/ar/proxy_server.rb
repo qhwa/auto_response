@@ -1,5 +1,6 @@
 require 'webrick/httpproxy'
 require 'logger'
+require 'ptools'
 
 require_relative 'rule_manager'
 require_relative 'parser'
@@ -44,7 +45,12 @@ module AutoResp
 
         res['x-auto-response-condition']  = @rule.first.to_s
         res['x-auto-response-with']       = @rule.last.to_s
-        res.header.merge!( header || {} )
+        if header
+          header.each do |k,v|
+            v = v.join("\n") if v.respond_to?(:join)
+            res[k] = v
+          end
+        end
         res.body = body
         info[:matched] = true
       else
@@ -75,8 +81,9 @@ module AutoResp
           
       @rule = rule
       if rule
-        condition, map_to = *rule
-        fetch(map_to, condition, url)
+        condition, handlers = *rule
+        handlers.each {|proc| proc.call if proc.respond_to?(:call) }
+        fetch(handlers.last, condition, url)
       end
     end
 
@@ -87,18 +94,33 @@ module AutoResp
     def fetch(txt, declare, uri)
 
       case txt
+      when nil
+        Net::HTTP.get_response(URI(uri)) do |res|
+          return [res.to_hash, res.read_body, res.code]
+        end
       when Proc
-        mtc = uri.match(declare) if Regexp === declare
-        fetch( txt.call(*mtc), declare, uri )
+        if Regexp === declare
+          mtc = uri.match(declare) 
+          fetch( txt.call(*mtc), declare, uri )
+        else
+          fetch( txt.call, declare, uri )
+        end
       when String
         if goto = redirect_path(txt)
           if is_uri?(goto)
             Net::HTTP.get_response(URI(goto)) do |res|
-              return [nil, res.body]
+              return [res.to_hash, res.read_body, res.code]
             end
           else
             file = File.expand_path( goto )
-            return parse(IO.read(file)) if File.exist?(file)
+            if File.exist?(file)
+              content = IO.read file
+              if File.binary? file
+                return [nil, content, 200]
+              else
+                return parse(content)
+              end
+            end
           end
         else
           parse(txt)
