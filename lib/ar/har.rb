@@ -100,10 +100,8 @@ module AutoResp
         body.utf8!
         body = '**raw data**' unless body.valid_encoding?
         {
-          status: res.status,
-
-          #FIXME:
-          statusText: 'OK',
+          status:       res.status,
+          statusText:   res.message,
 
           httpVersion:  res.http_version,
           cookies:      res.cookies.map {|c| 
