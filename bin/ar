@@ -1,6 +1,17 @@
 #!/usr/bin/env ruby
+
+## compatible with Ruby 1.8
+unless Kernel.respond_to?(:require_relative)
+  module Kernel
+    def require_relative(path)
+      require File.expand_path(path.to_str, File.dirname(caller[0]))
+    end
+  end
+end
+
 require 'daemons'
+require_relative '../lib/auto_response'
 
-START_SCRIPT = File.dirname(__FILE__) + '/start_ar.rb'
-
-Daemons.run START_SCRIPT
+Daemons.run_proc 'auto_response', :backtrace => true do
+  AutoResp::AutoResponder.new.start
+end

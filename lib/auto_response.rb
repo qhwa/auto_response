@@ -26,7 +26,6 @@ module AutoResp
       @rule_manager = RuleManager.new
       @logger = Logger.new( $stderr, Logger::WARN )
       init_autoresponse_home
-      init_proxy_server
       load_rules
       monitor_rules_change
     end
@@ -49,10 +48,11 @@ module AutoResp
         :logger       => @logger
       )
       trap('INT') { stop_and_exit }
+      @server
     end
 
     def start_proxy
-      @proxy_thread = Thread.new { @server.start }
+      @proxy_thread = Thread.new { init_proxy_server.start }
     end
 
     def start_viewer
@@ -62,6 +62,7 @@ module AutoResp
 
     public
     def start
+      log_rules
       start_proxy
       start_viewer
     end
@@ -105,9 +106,13 @@ module AutoResp
       path ||= @config[:rule_config]
       path ||= "#{ARHOME}/rules"
       if File.readable?(path)
-        @rule_manager.instance_eval File.read(path)
+        begin
+          @rule_manager.instance_eval File.read(path)
+        rescue SyntaxError => e
+          @logger.fatal "You have syntax error in your rules file, please check it"
+          exit 1
+        end
       end
-      log_rules
     end
 
     def log_rules
