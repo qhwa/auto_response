@@ -39,9 +39,9 @@ spec = Gem::Specification.new do |s|
 
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
-  s.add_dependency("listen")
+  s.add_dependency("listen", "~> 0.6.0")
   s.add_dependency("colorize")
-  s.add_dependency("daemons")
+  s.add_dependency("daemons", "~> 1.1.9")
   s.add_dependency("string_utf8")
   s.add_dependency("rb-inotify", "~> 0.9")
   s.add_dependency("ptools")
