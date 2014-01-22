@@ -33,18 +33,30 @@ module AutoResp
         end
       end
 
-      header, body, status = find_auto_res(req.unparsed_uri)
+      begin
+        header, body, status = find_auto_res(req.unparsed_uri)
+      rescue => e
+        header = {}
+        body   = <<-MSG
+          ERROR:
+            #{e.message}
+            #{e.backtrace.join "\n"}
+          MSG
+        status = 500
+      end
+
       res.status = status if status
 
       if @rule
 
         logger.debug "match".ljust(8)   << ": #{req.unparsed_uri}"
         logger.debug "header".ljust(8)  << ": #{header}"
-        logger.debug "body".ljust(8)    << ": \n#{body}"
+        logger.debug "body".ljust(8)    << ": \n#{body[0..200]}#{'...' if body.size > 200}"
         logger.debug "-"*50
 
         res['x-auto-response-condition']  = @rule.first.to_s
         res['x-auto-response-with']       = @rule.last.to_s
+
         if header
           header.each do |k,v|
             v = v.join("\n") if v.respond_to?(:join)
@@ -82,6 +94,7 @@ module AutoResp
       @rule = rule
       if rule
         condition, handlers = *rule
+        handlers = [handlers] unless handlers.is_a?(Array)
         handlers.each {|proc| proc.call if proc.respond_to?(:call) }
         fetch(handlers.last, condition, url)
       end
@@ -91,9 +104,9 @@ module AutoResp
       trim_url(rule) === trim_url(url)
     end
 
-    def fetch(txt, declare, uri)
+    def fetch(handler, declare, uri)
 
-      case txt
+      case handler
       when nil
         Net::HTTP.get_response(URI(uri)) do |res|
           return [res.to_hash, res.read_body, res.code]
@@ -101,12 +114,12 @@ module AutoResp
       when Proc
         if Regexp === declare
           mtc = uri.match(declare) 
-          fetch( txt.call(*mtc), declare, uri )
+          fetch( handler.call(*mtc), declare, uri )
         else
-          fetch( txt.call, declare, uri )
+          fetch( handler.call, declare, uri )
         end
       when String
-        if goto = redirect_path(txt)
+        if goto = redirect_path(handler)
           if is_uri?(goto)
             Net::HTTP.get_response(URI(goto)) do |res|
               return [res.to_hash, res.read_body, res.code]
@@ -123,12 +136,12 @@ module AutoResp
             end
           end
         else
-          parse(txt)
+          parse(handler)
         end
       when Fixnum
-        [{}, "", txt]
+        [{}, "", handler]
       when Array
-        [txt[1], txt[2], txt[0]]
+        [handler[1], handler[2], handler[0]]
       end
     end
 

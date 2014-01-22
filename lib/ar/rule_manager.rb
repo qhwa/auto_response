@@ -30,15 +30,10 @@ module AutoResp
       when Hash
         @last_rule = target.keys.first
         rules.merge! target
-      when String
+      when String, Regexp
         rules[target] = args[1]
-      when Regexp
-        if block_given?
-          rules[target] = block
-        else
-          rules[target] = args[1]
-        end
       end
+      rules[target] ||= block if block
     end
 
   end
