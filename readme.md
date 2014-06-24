@@ -16,10 +16,10 @@ Auto_response acts as a proxy server like Fiddler does, allowing you to modify t
 
     ~~~sh
     gem install 'auto_response'
-    ar start
+    auto_resp start
 
-    ar status #check server status
-    ar stop   #stop proxy server
+    auto_resp status #check server status
+    auto_resp stop   #stop proxy server
     ~~~
 
 2. Set your browser proxy to 'http://127.0.0.1:9000'
