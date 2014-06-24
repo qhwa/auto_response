@@ -123,8 +123,7 @@ module AutoResp
     end
 
     def monitor_rules_change
-      listener = Listen.to(ARHOME)
-      listener.change { reload_rules }
+      listener = Listen.to(ARHOME) { reload_rules }
       Thread.new { listener.start }
     end
 
