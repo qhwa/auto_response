@@ -4,8 +4,7 @@ require 'fileutils'
 require 'listen'
 require 'colorize'
 require 'logger'
-
-$: << File.expand_path( File.dirname(__FILE__) )
+require 'socket'
 
 require 'ar/version'
 require 'ar/proxy_server'
@@ -19,18 +18,43 @@ module AutoResp
   class AutoResponder
 
     ARHOME = "#{ENV["HOME"]}/.auto_response"
-    RULES = "#{ARHOME}/rules"
+    RULES  = "#{ARHOME}/rules"
 
-    def initialize(config={})
-      @config = config
-      @rule_manager = RuleManager.new
-      @logger = Logger.new( $stderr, Logger::WARN )
+    def initialize(config = {})
+
+      @config             = config
+      @rule_manager       = RuleManager.new
+      @logger             = init_logger
+
+      @logger.debug { "Starting AutoResp v#{VERSION}" }
+      @logger.debug { "Listening at " << "#{ip_address}:#{proxy_port}".yellow }
+
       init_autoresponse_home
       load_rules
       monitor_rules_change
     end
     
     protected
+
+    def init_logger
+      Logger.new( $stderr, Logger::WARN ).tap do |logger|
+        logger.formatter = proc do |serverity, datetime, prog, msg|
+          indent = {
+            :debug  => '--',
+            :info   => '  ',
+            :warn   => '[W]',
+            :error  => '[E]',
+            :fatal  => '[F]'
+          }[serverity.downcase.to_sym]
+          "#{indent} #{msg}\n"
+        end
+      end
+    end
+
+    def ip_address
+      Socket.ip_address_list.detect {|intf| intf.ipv4_private? }.ip_address
+    end
+
     def init_autoresponse_home
       unless File.exist?(RULES)
         pwd = File.expand_path('..', File.dirname(__FILE__))
@@ -44,11 +68,15 @@ module AutoResp
       @server = ProxyServer.new(
         self,
         :BindAddress  => @config[:host] || '0.0.0.0',
-        :Port         => @config[:port] || 9000,
+        :Port         => proxy_port,
         :logger       => @logger
       )
       trap('INT') { stop_and_exit }
       @server
+    end
+
+    def proxy_port
+      @config[:port] || 9000
     end
 
     def start_proxy
@@ -103,8 +131,7 @@ module AutoResp
 
     private
     def load_rules(path=nil)
-      path ||= @config[:rule_config]
-      path ||= "#{ARHOME}/rules"
+      path ||= @config[:rule_config] || "#{ARHOME}/rules"
       if File.readable?(path)
         begin
           @rule_manager.instance_eval File.read(path)
@@ -116,9 +143,11 @@ module AutoResp
     end
 
     def log_rules
-      @logger.info "mapping rules:"
+      @logger.debug "Mapping rules:"
       rules.each do |n,v|
-        @logger.info "\n" << n.to_s.ljust(30).green << "\n=> #{v}"
+        @logger.info ""
+        @logger.info n.to_s.ljust(30).green 
+        @logger.info "=> #{v}"
       end
     end
 
