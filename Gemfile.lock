@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    auto_response (0.1.8)
+    auto_response (0.2.0)
       colorize
       daemons (~> 1.1.9)
       listen (~> 2.0)
