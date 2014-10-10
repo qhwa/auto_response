@@ -12,25 +12,27 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    celluloid (0.15.2)
-      timers (~> 1.1.0)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     colorize (0.7.3)
     daemons (1.1.9)
-    ffi (1.9.3)
+    ffi (1.9.6)
+    hitimes (1.2.2)
     json (1.8.1)
-    listen (2.7.9)
+    listen (2.7.11)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    ptools (1.2.4)
+    ptools (1.2.6)
     rake (10.3.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rdoc (4.1.1)
+    rdoc (4.1.2)
       json (~> 1.4)
     string_utf8 (0.1.1)
-    timers (1.1.0)
+    timers (4.0.1)
+      hitimes
 
 PLATFORMS
   ruby
