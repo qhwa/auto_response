@@ -100,3 +100,7 @@ r "Delayed with 10 seconds"
 
 ## TODO:
 * GUI monitor showing sessions
+
+## License
+
+[MIT License](https://opensource.org/licenses/MIT)
