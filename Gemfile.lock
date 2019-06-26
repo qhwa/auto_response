@@ -14,24 +14,22 @@ GEM
   specs:
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    colorize (0.7.3)
+    colorize (0.8.1)
     daemons (1.1.9)
-    ffi (1.9.6)
-    hitimes (1.2.2)
-    json (1.8.1)
-    listen (2.7.11)
-      celluloid (>= 0.15.2)
+    ffi (1.11.1)
+    hitimes (1.3.1)
+    listen (2.10.1)
+      celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    ptools (1.2.6)
-    rake (10.3.2)
-    rb-fsevent (0.9.4)
-    rb-inotify (0.9.5)
-      ffi (>= 0.5.0)
-    rdoc (4.1.2)
-      json (~> 1.4)
+    ptools (1.3.5)
+    rake (12.3.2)
+    rb-fsevent (0.10.3)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
+    rdoc (6.1.1)
     string_utf8 (0.1.1)
-    timers (4.0.1)
+    timers (4.0.4)
       hitimes
 
 PLATFORMS
@@ -41,3 +39,6 @@ DEPENDENCIES
   auto_response!
   rake
   rdoc
+
+BUNDLED WITH
+   1.11.2
