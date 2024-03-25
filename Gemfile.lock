@@ -27,7 +27,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rdoc (6.3.2)
+    rdoc (6.3.4.1)
     string_utf8 (0.1.1)
     timers (4.0.4)
       hitimes
